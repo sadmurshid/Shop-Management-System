@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.Glow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<GridPane fx:id="loginGridpane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="455.0" prefWidth="630.0" styleClass="background" stylesheets="@style.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="project.loginPageController">
+  <columnConstraints>
+    <ColumnConstraints hgrow="SOMETIMES" maxWidth="304.0" minWidth="10.0" prefWidth="304.0" />
+    <ColumnConstraints hgrow="SOMETIMES" maxWidth="342.0" minWidth="10.0" prefWidth="326.0" />
+  </columnConstraints>
+  <rowConstraints>
+    <RowConstraints maxHeight="137.0" minHeight="10.0" prefHeight="125.0" vgrow="SOMETIMES" />
+    <RowConstraints maxHeight="188.0" minHeight="10.0" prefHeight="168.0" vgrow="SOMETIMES" />
+    <RowConstraints maxHeight="162.0" minHeight="10.0" prefHeight="162.0" vgrow="SOMETIMES" />
+  </rowConstraints>
+   <children>
+      <AnchorPane prefHeight="153.0" prefWidth="342.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+         <children>
+            <TextField fx:id="userNameTextfield" layoutX="54.0" layoutY="14.0" prefHeight="25.0" prefWidth="236.0" promptText="USER NAME" />
+            <PasswordField fx:id="passwordPasswordField" layoutX="54.0" layoutY="58.0" prefHeight="25.0" prefWidth="236.0" promptText="PASSWORD" />
+            <Label fx:id="errorMessageLabel" layoutX="54.0" layoutY="120.0" prefHeight="17.0" prefWidth="236.0" text="Label" textFill="RED" />
+         </children>
+         <padding>
+            <Insets right="20.0" />
+         </padding>
+      </AnchorPane>
+      <ImageView fitHeight="181.0" fitWidth="263.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="1">
+         <image>
+            <Image url="@Logo.PNG" />
+         </image>
+         <GridPane.margin>
+            <Insets left="20.0" right="20.0" />
+         </GridPane.margin></ImageView>
+      <AnchorPane prefHeight="134.0" prefWidth="291.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+         <children>
+            <Button fx:id="loginButton" layoutX="57.0" layoutY="17.0" mnemonicParsing="false" onAction="#initialize" text="LOG IN">
+               <effect>
+                  <Glow />
+               </effect></Button>
+            <Button fx:id="signupButton" layoutX="176.0" layoutY="17.0" mnemonicParsing="false" text="SIGN UP" />
+         </children>
+      </AnchorPane>
+   </children>
+</GridPane>
