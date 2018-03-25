@@ -15,26 +15,20 @@ public class database {
     {
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            String url = address;
-            conn = DriverManager.getConnection(url,user,password);
+            conn = DriverManager.getConnection(address, user, password);
             System.out.println("conn built");
             databaseExist(databaseName);
-            statement= conn.createStatement();
-            sql="use "+databaseName;
+            statement = conn.createStatement();
+            sql = "use " + databaseName;
             statement.executeUpdate(sql);
             createTableNameAndParameter();
-            for(int i=0; i<tableNameAndParameter.length; i++)
-            {
-                if(!tableExist(databaseName,tableNameAndParameter[i][0]))
+            for (int i = 0; i < tableNameAndParameter.length; i++) {
+                if (!tableExist(databaseName, tableNameAndParameter[i][0]))
                     createTable(databaseName, tableNameAndParameter[i][0], tableNameAndParameter[i][1]);
             }
 
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
         } catch (Exception e){
-            System.out.println(e);
+            e.printStackTrace();
         }
 
     }
@@ -116,16 +110,18 @@ public class database {
     Return     : void
     Purpose    : Check a database using the given name. If don't exist then call createDatabase to create one.
 */
-    private static void databaseExist(String databaseName) throws Exception
+    private static void databaseExist(String databaseName)
     {
-        String getDatabaseName="";
+        String getDatabaseName;
         ResultSet resultSet=null;
         boolean requiredDatabase=false;
         try {
             resultSet = conn.getMetaData().getCatalogs();
         }
         catch(Exception e)
-        {System.out.println(e);}
+        {
+            e.printStackTrace();
+        }
         try{
             while(resultSet.next())
             {
@@ -317,6 +313,72 @@ public class database {
         }
 
         return color;
+    }
+
+    public boolean addUser(String name, String password, String phone_number, String address, String email
+                                , int inventory, int batch, int order, int debits, String b_color){
+//        boolean boo=false;
+        try{
+            sql="use "+databaseName;
+            statement.executeUpdate(sql);
+            sql="select max(user_ID) from user";
+            rs = statement.executeQuery(sql);
+            rs.next();
+            int max=rs.getInt("max(user_ID)");
+            if(!accessIntCorrect(inventory)||!accessIntCorrect(batch)||!accessIntCorrect(order)
+                            ||!accessIntCorrect(debits)){
+                return false;
+            }
+            sql="insert into user values ("+(max+1)+", '"+name+"', '"+password+"', '"+ phone_number+"', '"+address+"', '"
+                    +email+"', '"+b_color+"', "+ inventory+", "+batch+", "+order+", "+debits+");";
+            System.out.println(sql);
+            statement.executeUpdate(sql);
+            return true;
+
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+
+    }
+
+    private boolean accessIntCorrect(int integer){
+        boolean boo=false;
+        try{
+            if(integer==0||integer==1)
+                return true;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return  boo;
+    }
+
+
+/*  Method Name: nameExist
+    Parameter  : String Name
+    Purpose    : Check names from the user table whether exist by the given name
+    Return     : Boolean true if name exist false if don't exist
+*/
+    public boolean nameExist(String name){
+        boolean boo=false;
+        try{
+            String tempUser;
+            sql="use "+databaseName;
+            statement.executeUpdate(sql);
+            sql="select name from user order by user_ID;";
+            resultSet=statement.executeQuery(sql);
+            while(resultSet.next())
+            {
+                tempUser=resultSet.getString("name");
+//                System.out.println(tempUser+" "+tempPassword);
+                if(tempUser.equals(name))
+                    return true;
+            }
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return boo;
     }
 
 }
