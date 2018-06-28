@@ -16,6 +16,7 @@ public class database {
         try {
             Class.forName("com.mysql.jdbc.Driver");
             conn = DriverManager.getConnection(address, user, password);
+
             System.out.println("conn built");
             databaseExist(databaseName);
             statement = conn.createStatement();
@@ -26,6 +27,9 @@ public class database {
                 if (!tableExist(databaseName, tableNameAndParameter[i][0]))
                     createTable(databaseName, tableNameAndParameter[i][0], tableNameAndParameter[i][1]);
             }
+            if(!nameExist("SYSTEM_ADMIN"))
+                addUser("SYSTEM_ADMIN", "admin", "01676542521", "51/1 Gohailkandi","sadmurshid@gmail.com", 1, 1,1,1, "#ffffff");
+
 
         } catch (Exception e){
             e.printStackTrace();
@@ -45,7 +49,7 @@ public class database {
 */
     private static void createTableNameAndParameter()
     {
-        tableNameAndParameter=new String[5][2];
+        tableNameAndParameter=new String[6][2];
         tableNameAndParameter[0][0]="user";
         tableNameAndParameter[0][1]="user_ID int not null AUTO_INCREMENT,"+
                                      "name varchar(40),"+
@@ -103,6 +107,13 @@ public class database {
                                     "date_given date,"+
                                     "date_return date,"+
                                     "PRIMARY KEY (customer_ID,debits_ID)";
+        tableNameAndParameter[5][0]="basic";
+        tableNameAndParameter[5][1]="shop_name varchar(40) not null,"+
+                                    "owner_name varchar(40),"+
+                                    "address varchar(80),"+
+                                    "contact varchar(40),"+
+                                    "picture_location varchar(150),"+
+                                    "PRIMARY KEY (shop_name)";
     }
 
 /*  Method Name: databaseExist
@@ -148,13 +159,14 @@ public class database {
 */
     private static void createDatabase(String database)
     {
-        String sql="create database "+database+" ;";
+        String sql="create database "+database+";";
         System.out.println(sql);
-        Statement stmt=null;
+        Statement stmt;
         try{
             stmt=conn.createStatement();
             stmt.executeUpdate(sql);
             System.out.println("Database created successfully");
+
         }
         catch(Exception e)
         {
@@ -205,7 +217,7 @@ public class database {
             sql="use "+databaseName;
             statement.executeUpdate(sql);
             sql="create table "+tableName+" ("+nameParameter+");";
-//            System.out.println(sql);
+            System.out.println(sql);
             statement.executeUpdate(sql);
             creationSuccessful=true;
         }
@@ -320,6 +332,7 @@ public class database {
 //        boolean boo=false;
         try{
             sql="use "+databaseName;
+            System.out.println(sql);
             statement.executeUpdate(sql);
             sql="select max(user_ID) from user";
             rs = statement.executeQuery(sql);
@@ -375,10 +388,90 @@ public class database {
                     return true;
             }
 
-        }catch (Exception e){
+        }catch(NullPointerException npe){
+            return false;
+        }
+        catch (Exception e){
             e.printStackTrace();
         }
         return boo;
+    }
+
+    public String getShopName() {
+        String shopName="";
+        try{
+            sql="use "+databaseName;
+            statement.executeUpdate(sql);
+            sql="select shop_name from basic ;";
+            resultSet=statement.executeQuery(sql);
+            shopName=resultSet.getString("shop_name");
+            return shopName;
+
+        }catch (SQLException sqlE){
+            sqlE.printStackTrace();
+            return "Shop Name Wasn't Set.";
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        return shopName;
+    }
+
+    public String getOwnerName() {
+        String ownerName="";
+        try{
+            sql="use "+databaseName;
+            statement.executeUpdate(sql);
+            sql="select owner_name from basic ;";
+            resultSet=statement.executeQuery(sql);
+            ownerName=resultSet.getString("owner_name");
+            return ownerName;
+
+        }catch (SQLException sqlE){
+            sqlE.printStackTrace();
+            return "Owner Name Wasn't Set.";
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return ownerName;
+    }
+
+    public String getAddress() {
+        String address="";
+        try{
+            sql="use "+databaseName;
+            statement.executeUpdate(sql);
+            sql="select address from basic ;";
+            resultSet=statement.executeQuery(sql);
+            address=resultSet.getString("address");
+            return address;
+
+        }catch (SQLException sqlE){
+            sqlE.printStackTrace();
+            return "Address Wasn't Set.";
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return address;
+    }
+
+    public String getContact() {
+        String contact="";
+        try{
+            sql="use "+databaseName;
+            statement.executeUpdate(sql);
+            sql="select contact from basic ;";
+            resultSet=statement.executeQuery(sql);
+            contact=resultSet.getString("contact");
+            return contact;
+
+        }catch (SQLException sqlE){
+            sqlE.printStackTrace();
+            return "Contact Wasn't Set.";
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return contact;
     }
 
 }
